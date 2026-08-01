@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Internship Tracker</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Internship Application Tracker</h1>
+
+    <form id="addForm" class="card">
+      <div class="row">
+        <input type="text" id="companyName" placeholder="Company (e.g. Google)" required>
+        <input type="text" id="role" placeholder="Role (e.g. SDE Intern)" required>
+      </div>
+      <div class="row">
+        <input type="date" id="appliedDate" required>
+        <input type="date" id="followUpDate">
+        <select id="status">
+          <option>Applied</option>
+          <option>OA/Test</option>
+          <option>Interview</option>
+          <option>Offer</option>
+          <option>Rejected</option>
+          <option>Ghosted</option>
+        </select>
+      </div>
+      <textarea id="notes" placeholder="Notes (optional)"></textarea>
+      <button type="submit">Add application</button>
+    </form>
+
+    <div id="stats" class="stats"></div>
+
+    <table id="table">
+      <thead>
+        <tr><th>Company</th><th>Role</th><th>Status</th><th>Applied</th><th>Follow-up</th><th>Notes</th><th></th></tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
