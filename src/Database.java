@@ -4,11 +4,15 @@ import java.util.*;
 public class Database {
     private static final String URL = "jdbc:mysql://localhost:3306/internship_tracker";
     private static final String USER = "root";
-    private static final String PASSWORD = "Dhruv@123"; // match your actual password
+    private static final String PASSWORD = System.getenv("DB_PASSWORD"); // match your actual password
 
     public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(URL, USER, PASSWORD);
+    if (PASSWORD == null) {
+        throw new IllegalStateException("DB_PASSWORD environment variable is not set. See README for setup.");
     }
+    return DriverManager.getConnection(URL, USER, PASSWORD);
+    }
+
 
     public static List<Application> getAll() throws SQLException {
         List<Application> list = new ArrayList<>();

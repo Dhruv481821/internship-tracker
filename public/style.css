@@ -48,3 +48,15 @@ th { background: #fafafa; color: #666; font-weight: 600; }
 .del-btn { background: none; color: #dc2626; font-size: 12px; padding: 4px 8px; }
 .del-btn:hover { background: #fee2e2; }
 select.status-select { width: auto; padding: 4px 8px; font-size: 12px; }
+.stat-warning { background: #fee2e2 !important; color: #dc2626 !important; font-weight: 600; }
+.row-overdue { background: #fff7ed; }
+.badge-overdue {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 2px 8px;
+  background: #fed7aa;
+  color: #9a3412;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 600;
+}

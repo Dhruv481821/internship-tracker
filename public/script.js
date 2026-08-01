@@ -1,4 +1,6 @@
 const API = "http://localhost:8080/api/applications";
+const TERMINAL_STATUSES = ["Offer", "Rejected", "Ghosted"];
+const REACHED_INTERVIEW = ["Interview", "Offer"];
 
 async function loadApplications() {
   const res = await fetch(API);
@@ -7,18 +9,39 @@ async function loadApplications() {
   renderStats(data);
 }
 
+function isOverdue(app) {
+  if (!app.followUpDate) return false;
+  if (TERMINAL_STATUSES.includes(app.status)) return false;
+  const today = new Date().toISOString().split("T")[0];
+  return app.followUpDate < today;
+}
+
 function renderStats(data) {
+  const total = data.length;
   const counts = {};
   data.forEach(a => counts[a.status] = (counts[a.status] || 0) + 1);
-  document.getElementById("stats").innerHTML =
-    `<span>Total: ${data.length}</span>` +
-    Object.entries(counts).map(([k, v]) => `<span>${k}: ${v}</span>`).join("");
+
+  const interviewed = data.filter(a => REACHED_INTERVIEW.includes(a.status)).length;
+  const offers = counts["Offer"] || 0;
+  const overdueCount = data.filter(isOverdue).length;
+
+  const interviewRate = total ? Math.round((interviewed / total) * 100) : 0;
+  const offerRate = total ? Math.round((offers / total) * 100) : 0;
+
+  document.getElementById("stats").innerHTML = `
+    <span>Total: ${total}</span>
+    <span>Interview rate: ${interviewRate}%</span>
+    <span>Offer rate: ${offerRate}%</span>
+    ${overdueCount > 0 ? `<span class="stat-warning">Needs follow-up: ${overdueCount}</span>` : ""}
+  `;
 }
 
 function renderTable(data) {
   const body = document.getElementById("tableBody");
-  body.innerHTML = data.map(a => `
-    <tr>
+  body.innerHTML = data.map(a => {
+    const overdue = isOverdue(a);
+    return `
+    <tr class="${overdue ? "row-overdue" : ""}">
       <td>${a.companyName}</td>
       <td>${a.role}</td>
       <td>
@@ -28,11 +51,12 @@ function renderTable(data) {
         </select>
       </td>
       <td>${a.appliedDate || ""}</td>
-      <td>${a.followUpDate || "-"}</td>
+      <td>${a.followUpDate || "-"} ${overdue ? '<span class="badge-overdue">Follow up</span>' : ""}</td>
       <td>${a.notes || ""}</td>
       <td><button class="del-btn" onclick="deleteApp(${a.id})">Delete</button></td>
     </tr>
-  `).join("");
+  `;
+  }).join("");
 }
 
 document.getElementById("addForm").addEventListener("submit", async (e) => {
