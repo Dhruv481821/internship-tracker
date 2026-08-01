@@ -1,0 +1,20 @@
+# Java
+*.class
+
+# VS Code
+.vscode/
+
+# Build folders
+out/
+bin/
+target/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Environment
+.env
